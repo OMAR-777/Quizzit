@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
+
+.form-div{
+    margin: 50px auto 50px; /* auto horizontally */
+    padding: 25px 15px 10px 15px; /*top right bottom left*/
+    border: 1px solid #80ced7;
+    border-radius: 25px; /*corners*/
+    font-size: 1.1em;
+    font-family: 'Ubuntu', serif;
+    background-image: linear-gradient(rgb(239 239 239),rgb(121 181 255));
+}
+form p{
+    font-size: .89em;
+}
+
+.logout{
+    color: red;
+}
+body{
+    background-image: url('../imgs/background/auth-backround.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover; 
+}
+.logo{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 120px;
+    width: 180px;
+}
