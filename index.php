@@ -107,6 +107,7 @@ function getUserRank()
 
                         ?>
                     </div>
+                <hr>
 
                 <?php endif; ?>
 
@@ -115,7 +116,6 @@ function getUserRank()
              
 
             
-                <hr>
                 <?php
                 $result = mysqli_query($conn, "SELECT points,cAns,wAns FROM users WHERE id=" . $_SESSION['id']);
                 $user = mysqli_fetch_assoc($result);
