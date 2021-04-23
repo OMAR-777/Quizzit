@@ -110,29 +110,11 @@ function getUserRank()
 
                 <?php endif; ?>
 
-                <!-- if username equal email, such as newly registered google accounts -->
-                <?php if ($_SESSION['username'] == $_SESSION['email']) : ?>
-                    <div class="alert alert-warning">
-                        Your username should not be the same as your email, for the security of your account, please change your username.
-                    </div>
+               
 
-                <?php endif; ?>
+             
 
-                <!-- if not verified show this message -->
-                <?php if (!$_SESSION['verified']) : ?>
-                    <div class="alert alert-warning">
-                        you need to verify your account,
-                        we emailed you at:
-                        <strong><?php echo $_SESSION['email']; ?></strong>
-                    </div>
-
-                <?php endif; ?>
-
-                <!-- else -->
-                <?php if ($_SESSION['verified']) : ?>
-                    <div class="alert alert-success">Your account is verified!</div>
-
-                <?php endif; ?>
+            
                 <hr>
                 <?php
                 $result = mysqli_query($conn, "SELECT points,cAns,wAns FROM users WHERE id=" . $_SESSION['id']);
