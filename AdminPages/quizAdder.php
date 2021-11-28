@@ -114,6 +114,13 @@ if (isset($_POST['submitted'])) {
         $messages['answers'] = 'You have successfully stored ' . $totalAnswers . ' answers in the database';
     }
 }
+
+if (isset($_POST['deletedQuiz'])) {
+    $quizID=$_POST['quizID'];
+    $sql="DELETE FROM quiz WHERE id = '$quizID'";
+    mysqli_query($conn, $sql);
+    $messages['quizDeletion'] = 'You have successfully deleted a quiz with id:' . $quizID ;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -317,7 +324,12 @@ if (isset($_POST['submitted'])) {
                         <tr>
                             <th>Quiz id: ' . $rowQuiz["id"] . '</th>
                             <th>' . $rowQuiz["name"] . '</th>
-                            <th>Category: ' . $rowQuiz["category"] . '</th>
+                            <th>Category: ' . $rowQuiz["category"] . '
+                            <form class="d-inline float-right" action="quizAdder.php" method="post">
+                                <input type="hidden" name="quizID" value="'. $rowQuiz["id"] .'"/>
+                                <button class="btn btn-sm btn-danger" name="deletedQuiz">Delete quiz</button>
+                            </form>
+                            </th>
                         </tr>
                         </thead>'; //quiz
                         // echo "id: " . $rowQuiz["id"] . " - Name: " . $rowQuiz["name"] . "<br>";

@@ -44,6 +44,7 @@ if (isset($_POST['submitUn'])) {
 }
 //avatar change
 if (isset($_POST['submitAvatar'])) {
+    //https://stackoverflow.com/questions/20556773/php-display-image-blob-from-mysql
     if (isset($_FILES['file']) && $_FILES['file']['name'] != null) {
         $file = $_FILES['file'];
 
@@ -60,12 +61,12 @@ if (isset($_POST['submitAvatar'])) {
         if (in_array($fileActualExt, $allowed)) {
             if ($fileError === 0) {
                 if ($fileSize < 10000000) { //less than 20mb
-                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = 'imgs/profile/' . $fileNameNew;
-
-                    move_uploaded_file($fileTmpName, $fileDestination);
-                    $message['successUpload'] = 'File uploaded!';
-                    changeUserPicTo($fileNameNew);
+                    $image = addslashes(file_get_contents($_FILES['file']['tmp_name']));
+                    //you keep your column name setting for insertion. I keep image type Blob.
+                    if(checkAvatarExist($_SESSION['id'])){
+                        deleteAvatar($_SESSION['id']);
+                    }
+                    insertAvatar($image);
                 } else {
                     $editError['size'] = 'size of your file is too big, make sure its less than 20mb';
                 }
@@ -79,6 +80,45 @@ if (isset($_POST['submitAvatar'])) {
         $editError['null'] = 'No file choosen';
     }
 }
+function insertAvatar($image)
+{
+    global $conn;
+    $userID = $_SESSION['id'];
+    echo $userID;
+    $insertAv = "INSERT INTO user_avatar(image,user_id) VALUES('$image','$userID')";
+    mysqli_query($conn, $insertAv);
+}
+function displayAvatar($userID)
+{
+    global $conn;
+    $userID = $_SESSION['id'];
+    $query = "SELECT * FROM user_avatar WHERE user_id = '$userID'";
+    $qry = mysqli_query($conn, $query);
+    $result = mysqli_fetch_array($qry);
+    echo '<img src="data:image/jpeg;base64,' . base64_encode($result['image']) . '" class="rounded-circle myavatar"/>';
+}
+function displayDefaultAvatar()
+{
+    echo '<img src="imgs/profile/default.png" class="rounded-circle myavatar"/>';
+}
+function deleteAvatar($userID){
+    global $conn;
+    $userID = $_SESSION['id'];
+    $query = "DELETE FROM user_avatar WHERE user_id = '$userID'";
+    $result = mysqli_query($conn, $query);
+}
+function checkAvatarExist($userID)
+{
+    global $conn;
+    $userID = $_SESSION['id'];
+    $query = "SELECT * FROM user_avatar WHERE user_id = '$userID'";
+    $result = mysqli_query($conn, $query);
+    $num = mysqli_num_rows($result);
+    if ($num > 0) {
+        return true;
+    }
+    return false;
+}
 function updateSession()
 {
     global $conn;
@@ -86,7 +126,6 @@ function updateSession()
     $sqlProf = "SELECT * FROM users where id=" . $_SESSION['id'];
     $resultProf = mysqli_query($conn, $sqlProf);
     $user = mysqli_fetch_assoc($resultProf);
-    $_SESSION['avatar'] = $user['avatar'];
     $_SESSION['username'] = $user['username'];
 }
 
@@ -340,6 +379,7 @@ function printRatio($cAns, $wAns)
             $("#username").show();
             $('#changeUn').show();
         }
+
         function validateImg() {
             var file = document.getElementById('uploadFile').files[0];
             var submit = document.getElementById('submitFile');
@@ -383,7 +423,13 @@ function printRatio($cAns, $wAns)
                 updateSession();
 
                 ?>
-                <img src="imgs/profile/<?php echo $_SESSION['avatar']; ?>" class="rounded-circle myavatar">
+                <?php 
+                if (checkAvatarExist($_SESSION['id'])) {
+                    displayAvatar($_SESSION['id']);
+                } else {
+                    displayDefaultAvatar();
+                }
+                ?>
                 <br>
                 <button id="changeBtn" onclick="changeAvatar(this)" class="btn btn-primary">Change avatar</button>
 
