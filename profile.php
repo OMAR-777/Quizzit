@@ -84,7 +84,6 @@ function insertAvatar($image)
 {
     global $conn;
     $userID = $_SESSION['id'];
-    echo $userID;
     $insertAv = "INSERT INTO user_avatar(image,user_id) VALUES('$image','$userID')";
     mysqli_query($conn, $insertAv);
 }
