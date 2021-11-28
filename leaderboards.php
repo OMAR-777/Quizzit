@@ -37,6 +37,19 @@ function printRatio($cAns, $wAns)
     }
 }
 
+function displayAvatar($userID)
+{
+    global $conn;
+    $query = "SELECT * FROM user_avatar WHERE user_id = '$userID'";
+    $qry = mysqli_query($conn, $query);
+    $result = mysqli_fetch_array($qry);
+    if($result){
+        return '<img class="leaderboards-avatar rounded-circle" src="data:image/jpeg;base64,' . base64_encode($result['image']) . '"/>';
+    }
+    return '<img class="leaderboards-avatar rounded-circle" src="imgs/profile/default.png">';
+    
+}
+
 
 ?>
 
@@ -114,7 +127,7 @@ function printRatio($cAns, $wAns)
 
                         $current = $_SESSION['id'] == $row['id'] ? 'text-primary' : '';
                         echo '<div class="shadow card">
-                    <div class="' . $current . ' card-body text-left font-weight-bold">' . $pos . ' <img class="leaderboards-avatar rounded-circle"src=imgs/profile/' . $row['avatar'] . '> <span class="leaderboards-info">' . $row['username'] . ' <span class="float-right">' . printRatio($row['cAns'], $row['wAns']) . ' | ' . $row['points'] . 'pts</span></span></div>
+                    <div class="' . $current . ' card-body text-left font-weight-bold">' . $pos.' '.displayAvatar($row['id']). ' <span class="leaderboards-info">' . $row['username'] . ' <span class="float-right">' . printRatio($row['cAns'], $row['wAns']) . ' | ' . $row['points'] . 'pts</span></span></div>
                   </div>';
                         $i++;
                     }
