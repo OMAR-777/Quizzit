@@ -7,6 +7,7 @@ define('WEBLINK','http://quizzit.us-east-1.elasticbeanstalk.com');//change to ur
 //     define('DB_PASS', '123456Ab');
 //     define('DB_NAME', 'quizzit');
 //     define('PORT', '3306');
+
 // } else {
     define('DB_HOST', getenv('DB_HOST'));
     define('DB_USER', getenv('DB_USER'));
